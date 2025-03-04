@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>미래를 선도하는 AI 교육 프로그램</title>
+    <style>
+        /* 전체 스타일 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        
+        body {
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* 헤더 스타일 */
+        header {
+            background: linear-gradient(135deg, #3498db, #8e44ad);
+            color: white;
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+        }
+        
+        .logo span {
+            color: #f39c12;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 30px;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: #f39c12;
+        }
+        
+        /* 히어로 섹션 */
+        .hero {
+            background: url('https://source.unsplash.com/random/1600x900/?artificial-intelligence') no-repeat center center/cover;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            color: white;
+            text-align: center;
+            position: relative;
+        }
+        
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        
+        .hero p {
+            font-size: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: #f39c12;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 18px;
+            transition: 0.3s;
+        }
+        
+        .btn:hover {
+            background: #e67e22;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* 소개 섹션 */
+        .about {
+            padding: 100px 0;
+            background: #f9f9f9;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .section-title h2 {
+            font-size: 36px;
+            color: #2c3e50;
+            position: relative;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+        
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 3px;
+            background: #f39c12;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .about-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .about-image {
+            flex: 1;
+            min-width: 300px;
+            text-align: center;
+        }
+        
+        .about-image img {
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .about-text {
+            flex: 1;
+            min-width: 300px;
+            padding: 20px;
+        }
+        
+        .about-text h3 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        
+        /* 특징 섹션 */
+        .features {
+            padding: 100px 0;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: 0.3s;
+            text-align: center;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-icon {
+            font-size: 48px;
+            color: #3498db;
+            margin-bottom: 20px;
+        }
+        
+        .feature-card h3 {
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        
+        /* 커리큘럼 섹션 */
+        .curriculum {
+            padding: 100px 0;
+            background: #f9f9f9;
+        }
+        
+        .timeline {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background-color: #3498db;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+        }
+        
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+            box-sizing: border-box;
+        }
+        
+        .timeline-item:nth-child(odd) {
+            left: 0;
+        }
+        
+        .timeline-item:nth-child(even) {
+            left: 50%;
+        }
+        
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background-color: white;
+            border: 4px solid #f39c12;
+            top: 15px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+        
+        .timeline-item:nth-child(odd)::after {
+            right: -12px;
+        }
+        
+        .timeline-item:nth-child(even)::after {
+            left: -12px;
+        }
+        
+        .timeline-content {
+            padding: 20px 30px;
+            background-color: white;
+            position: relative;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* 후기 섹션 */
+        .testimonials {
+            padding: 100px 0;
+        }
+        
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .testimonial-card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+        
+        .testimonial-author img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+        
+        .author-info h4 {
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .author-info p {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        /* 등록 섹션 */
+        .enrollment {
+            padding: 100px 0;
+            background: linear-gradient(135deg, #3498db, #8e44ad);
+            color: white;
+            text-align: center;
+        }
+        
+        .enrollment .section-title h2 {
+            color: white;
+        }
+        
+        .enrollment .section-title h2::after {
+            background: white;
+        }
+        
+        .enrollment-form {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        .form-group textarea {
+            height: 100px;
+        }
+        
+        .submit-btn {
+            background: #f39c12;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 18px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: bold;
+        }
+        
+        .submit-btn:hover {
+            background: #e67e22;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* 푸터 스타일 */
+        footer {
+            background: #2c3e50;
+            color: white;
+            padding: 50px 0;
+            text-align: center;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+            padding: 20px;
+        }
+        
+        .footer-section h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 2px;
+            background: #f39c12;
+            bottom: 0;
+            left: 0;
+        }
+        
+        .footer-section p {
+            margin-bottom: 10px;
+        }
+        
+        .social-links a {
+            display: inline-block;
+            margin-right: 10px;
+            width: 40px;
+            height: 40px;
+            background: #34495e;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            transition: 0.3s;
+        }
+        
+        .social-links a:hover {
+            background: #f39c12;
+            transform: translateY(-5px);
+        }
+        
+        .footer-bottom {
+            background: #1a252f;
+            padding: 15px 0;
+            text-align: center;
+            font-size: 14px;
+        }
+        
+        /* 반응형 디자인 */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin-top: 20px;
+                justify-content: center;
+            }
+            
+            nav ul li {
+                margin: 0 10px;
+            }
+            
+            .hero h1 {
+                font-size: 36px;
+            }
+            
+            .hero p {
+                font-size: 18px;
+            }
+            
+            .about-content {
+                flex-direction: column;
+            }
+            
+            .timeline::after {
+                left: 31px;
+            }
+            
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            
+            .timeline-item:nth-child(even) {
+                left: 0;
+            }
+            
+            .timeline-item::after {
+                left: 15px;
+            }
+            
+            .timeline-item:nth-child(odd)::after {
+                right: auto;
+                left: 15px;
+            }
+            
+            .timeline-item:nth-child(even)::after {
+                left: 15px;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .footer-section h3::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+    </style>
+    <!-- 아이콘 라이브러리 추가 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 구글 폰트 추가 -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- 헤더 섹션 -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">AI<span>Academy</span></div>
+            <nav>
+                <ul>
+                    <li><a href="#about">소개</a></li>
+                    <li><a href="#features">특징</a></li>
+                    <li><a href="#curriculum">커리큘럼</a></li>
+                    <li><a href="#testimonials">후기</a></li>
+                    <li><a href="#enrollment">수강신청</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 히어로 섹션 -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>미래를 선도하는 AI 전문가 과정</h1>
+            <p>인공지능의 시대, 4차 산업혁명의 핵심 기술을 배우고 미래 산업의 리더가 되세요.</p>
+            <a href="#enrollment" class="btn">지금 시작하기</a>
+        </div>
+    </section>
+
+    <!-- 소개 섹션 -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="section-title">
+                <h2>프로그램 소개</h2>
+                <p>실무 중심의 AI 교육으로 산업의 변화를 주도할 인재를 양성합니다</p>
+            </div>
+            <div class="about-content">
+                <div class="about-image">
+                    <img src="https://source.unsplash.com/random/600x400/?technology" alt="AI 교육 프로그램">
+                </div>
+                <div class="about-text">
+                    <h3>왜 AI Academy인가?</h3>
+                    <p>AI Academy는 기업과 산업 현장의 실제 요구사항을 반영한 실무 중심 교육을 제공합니다. 최신 기술 트렌드와 실제 프로젝트 경험을 통해 AI 전문가로 성장할 수 있도록 돕습니다.</p>
+                    <p>데이터 분석부터 머신러닝, 딥러닝, 자연어 처리까지 AI의 모든 영역을 체계적으로 학습하며, 현업 전문가의 멘토링을 통해 실전 역량을 키울 수 있습니다.</p>
+                    <p>졸업 후에는 취업 연계 프로그램을 통해 국내외 유수 기업으로의 취업 기회가 제공됩니다.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 특징 섹션 -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>프로그램 특징</h2>
+                <p>AI Academy만의 차별화된 교육 시스템</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <h3>실무 중심 프로젝트</h3>
+                    <p>실제 기업의 데이터와 문제를 활용한 프로젝트 기반 학습으로 실무 역량을 강화합니다.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>현업 전문가 멘토링</h3>
+                    <p>국내외 유수 기업의 AI 전문가들이 직접 멘토링을 제공하여 실전 감각을 익힐 수 있습니다.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                    <h3>인증서 발급</h3>
+                    <p>과정 수료 시 산업계에서 인정받는 AI 전문가 인증서를 발급해 드립니다.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <h3>취업 연계 프로그램</h3>
+                    <p>기업 파트너십을 통한 취업 연계 프로그램으로 수료 후 취업까지 지원합니다.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-cloud"></i>
+                    </div>
+                    <h3>클라우드 기반 학습환경</h3>
+                    <p>고성능 클라우드 환경에서 제약 없이 AI 모델을 학습하고 실험할 수 있습니다.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-network-wired"></i>
+                    </div>
+                    <h3>동문 네트워킹</h3>
+                    <p>AI 분야의 전문가들과 네트워킹을 형성하여 지속적인 성장 기회를 얻을 수 있습니다.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 커리큘럼 섹션 -->
+    <section id="curriculum" class="curriculum">
+        <div class="container">
+            <div class="section-title">
+                <h2>커리큘럼</h2>
+                <p>16주 완성 AI 전문가 과정 로드맵</p>
+            </div>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>1-2주차: AI 기초 및 파이썬</h3>
+                        <p>- 인공지능의 개념과 발전 역사</p>
+                        <p>- 파이썬 프로그래밍 기초</p>
+                        <p>- 데이터 구조와 알고리즘</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>3-4주차: 데이터 분석 및 전처리</h3>
+                        <p>- 데이터 수집 및 정제 기법</p>
+                        <p>- 탐색적 데이터 분석(EDA)</p>
+                        <p>- Pandas, NumPy, Matplotlib 활용</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>5-8주차: 머신러닝 기초 및 심화</h3>
+                        <p>- 지도학습과 비지도학습</p>
+                        <p>- 회귀, 분류, 클러스터링 알고리즘</p>
+                        <p>- 모델 평가 및 최적화</p>
+                        <p>- 앙상블 학습법</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>9-12주차: 딥러닝 기초 및 응용</h3>
+                        <p>- 신경망의 기본 개념</p>
+                        <p>- CNN, RNN, LSTM 아키텍처</p>
+                        <p>- 컴퓨터 비전과 이미지 처리</p>
+                        <p>- 자연어 처리 기법</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>13-14주차: 최신 AI 기술 트렌드</h3>
+                        <p>- 강화학습의 이해</p>
+                        <p>- 생성형 AI와 GANs</p>
+                        <p>- 트랜스포머 모델과 BERT/GPT</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>15-16주차: 실전 프로젝트</h3>
+                        <p>- 기업 연계 실전 프로젝트</p>
+                        <p>- 프로젝트 성과 발표</p>
+                        <p>- 취업 준비 및 포트폴리오 구성</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 후기 섹션 -->
+    <section id="testimonials" class="testimonials">
+        <div class="container">
+            <div class="section-title">
+                <h2>수강생 후기</h2>
+                <p>AI Academy를 통해 성공한 수강생들의 이야기</p>
+            </div>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        <p>"비전공자였지만 체계적인 커리큘럼 덕분에 AI의 기초부터 심화까지 탄탄하게 배울 수 있었습니다. 과정 수료 후 바로 IT 대기업에 취업할 수 있었어요!"</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/women/32.jpg" alt="김지민">
+                        <div class="author-info">
+                            <h4>김지민</h4>
+                            <p>데이터 사이언티스트 @ 네이버</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        <p>"실무 중심의 프로젝트 경험이 정말 큰 도움이 되었습니다. 배운 내용을 바로 적용해볼 수 있어 학습 효과가 매우 높았고, 현재는 스타트업에서 AI 개발자로 일하고 있습니다."</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="이준호">
+                        <div class="author-info">
+                            <h4>이준호</h4>
+                            <p>AI 엔지니어 @ 스타트업</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        <p>"현업 전문가들의 멘토링이 가장 큰 장점이었습니다. 실제 산업에서 필요로 하는 기술과 지식을 습득할 수 있었고, 이를 통해 경력 전환에 성공했습니다."</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="박서연">
+                        <div class="author-info">
+                            <h4>박서연</h4>
+                            <p>머신러닝 엔지니어 @ 삼성전자</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 등록 섹션 -->
+    <section id="enrollment" class="enrollment">
+        <div class="container">
+            <div class="section-title">
+                <h2>수강 신청</h2>
+                <p>지금 바로 AI 전문가의 꿈을 시작하세요</p>
+            </div>
+            <div class="enrollment-form">
+                <form action="#" method="POST">
+                    <div class="form-group">
+                        <label for="name">이름</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">이메일</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">연락처</label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="background">전공/직무 배경</label>
+                        <input type="text" id="background" name="background">
+                    </div>
+                    <div class="form-group">
+                        <label for="course">희망 과정</label>
+                        <select id="course" name="course" required>
+                            <option value="">선택해주세요</option>
+                            <option value="fulltime">AI 전문가 양성 과정 (풀타임)</option>
+                            <option value="parttime">AI 기초 과정 (파트타임)</option>
+                            <option value="advanced">AI 고급 과정 (주말반)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">지원 동기</label>
+                        <textarea id="message" name="message"></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">수강 신청하기</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- 푸터 섹션 -->
+    
