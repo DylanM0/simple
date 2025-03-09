@@ -1,0 +1,324 @@
+/* 추가 스타일 */
+.about-icons {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 3rem;
+}
+
+.icon-item {
+  text-align: center;
+}
+
+.icon-item img {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 1rem;
+}
+
+.btn-course {
+  display: inline-block;
+  background-color: var(--primary-color);
+  color: white;
+  padding: 0.5rem 1.5rem;
+  border-radius: 4px;
+  text-decoration: none;
+  margin-top: 1rem;
+  transition: background-color 0.3s;
+}
+
+.btn-course:hover {
+  background-color: var(--secondary-color);
+}
+
+.contact-form {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.contact-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.contact-form input,
+.contact-form textarea {
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.contact-form textarea {
+  min-height: 150px;
+}
+
+.contact-form button {
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  padding: 1rem;
+  font-size: 1.1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.contact-form button:hover {
+  background-color: #e55a00;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-logo img {
+  width: 150px;
+}
+
+.footer-info, .footer-links {
+  margin: 1rem 0;
+}
+
+.footer-links ul {
+  list-style: none;
+}
+
+.footer-links a {
+  text-decoration: none;
+  display: block;
+  margin: 0.5rem 0;
+}
+
+.copyright {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+@media (max-width: 768px) {
+  .about-icons {
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+/* 애니메이션 효과 */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-50px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(50px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* 애니메이션 적용 */
+.header-content h1 {
+  animation: fadeIn 1s ease-out;
+}
+
+.header-content p {
+  animation: fadeIn 1s ease-out 0.3s forwards;
+  opacity: 0;
+  animation-fill-mode: forwards;
+}
+
+.header-content .btn-primary {
+  animation: fadeIn 1s ease-out 0.6s forwards;
+  opacity: 0;
+  animation-fill-mode: forwards;
+}
+
+.about-icons .icon-item:nth-child(1) {
+  animation: slideInLeft 1s ease-out 0.3s forwards;
+  opacity: 0;
+  animation-fill-mode: forwards;
+}
+
+.about-icons .icon-item:nth-child(2) {
+  animation: fadeIn 1s ease-out 0.6s forwards;
+  opacity: 0;
+  animation-fill-mode: forwards;
+}
+
+.about-icons .icon-item:nth-child(3) {
+  animation: slideInRight 1s ease-out 0.9s forwards;
+  opacity: 0;
+  animation-fill-mode: forwards;
+}
+
+.btn-primary:hover, .btn-course:hover {
+  /* animation: pulse 0.5s ease-in-out; */ /* 애니메이션 제거 */
+  background-color: white;
+  color: var(--primary-color);
+  border: 2px solid var(--primary-color);
+  font-weight: 700;
+}
+
+/* 추가 스타일 개선 */
+.course {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.course p {
+  flex-grow: 1;
+}
+
+/* 스크롤 효과 */
+html {
+  scroll-behavior: smooth;
+}
+
+/* 모바일 최적화 추가 */
+@media (max-width: 576px) {
+  section {
+    padding: 3rem 1rem;
+  }
+  
+  .comparison-table th, 
+  .comparison-table td {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.9rem;
+  }
+  
+  .contact-form input,
+  .contact-form textarea,
+  .contact-form button {
+    font-size: 1rem;
+    padding: 0.75rem;
+  }
+  
+  .header-content {
+    padding: 4rem 1rem;
+  }
+  
+  .header-content h1 {
+    font-size: 1.8rem;
+  }
+  
+  .header-content p {
+    font-size: 1rem;
+  }
+}
+
+/* 다크 모드 지원 비활성화 */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* 라이트 모드 색상을 강제 적용 */
+    --light-bg: #f8f9fa !important;
+    --dark-text: #333333 !important;
+    --gray-text: #666666 !important;
+    --primary-color: #0068b5 !important;
+    --primary-dark: #004f8a !important;
+    --primary-light: #0078d4 !important;
+    --secondary-color: #00a4ef !important;
+    --accent-color: #ffb900 !important;
+    --background-light: #f8f9fa !important;
+    --background-white: #ffffff !important;
+    --section-bg-1: #f0f7ff !important;
+    --section-bg-2: #ffffff !important;
+    --section-bg-3: #f5f9ff !important;
+    --yellow-card-bg: #ffffff !important;
+    --process-section-bg: #e0f5e0 !important;
+  }
+  
+  body {
+    background-color: var(--background-white) !important;
+    color: var(--text-color) !important;
+  }
+  
+  #about, .course, .faq-item, .contact-info, .contact-form, #comparison {
+    background-color: var(--background-white) !important;
+    color: var(--text-color) !important;
+  }
+  
+  .comparison-table th {
+    background-color: var(--primary-color) !important;
+  }
+  
+  .comparison-table tr:nth-child(even) {
+    background-color: var(--background-light) !important;
+  }
+  
+  .comparison-table td {
+    border-color: var(--border-color) !important;
+  }
+  
+  .contact-form input,
+  .contact-form textarea {
+    background-color: var(--background-white) !important;
+    color: var(--text-color) !important;
+  }
+  
+  .yellow-support-card {
+    background-color: #ffffff !important;
+  }
+}
+
+/* 접근성 개선 */
+.btn-primary, .btn-course, button {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary:focus, .btn-course:focus, button:focus,
+.nav-menu a:focus, .footer-links a:focus {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+/* 인쇄 스타일 */
+@media print {
+  nav, .btn-primary, .btn-course, .contact-form button {
+    display: none;
+  }
+  
+  body, #about, .course, .faq-item, .contact-info, .contact-form, #comparison {
+    background-color: white !important;
+    color: black !important;
+    box-shadow: none !important;
+  }
+  
+  .header-content {
+    padding: 1rem;
+    background-image: none !important;
+  }
+  
+  .header-content::before {
+    display: none;
+  }
+  
+  .header-content h1, .header-content p {
+    color: black !important;
+  }
+  
+  section {
+    padding: 1rem 0;
+    margin-bottom: 1rem;
+    page-break-inside: avoid;
+  }
+} 
