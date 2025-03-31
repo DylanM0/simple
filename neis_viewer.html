@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEIS API 뷰어</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <style>
+    body {
+      font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+      background-color: #f8f9fa;
+      color: #333;
+    }
+    .container {
+      max-width: 1200px;
+      padding: 20px;
+    }
+    .card {
+      margin-bottom: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+    .card-header {
+      background-color: #4a6baf;
+      color: white;
+      font-weight: bold;
+      padding: 15px 20px;
+    }
+    .api-card {
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .api-card:hover {
+      transform: translateY(-5px);
+    }
+    .form-section {
+      padding: 20px;
+      background-color: #f1f3f9;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+    .result-section {
+      max-height: 600px;
+      overflow-y: auto;
+    }
+    .table-responsive {
+      max-height: 500px;
+      overflow-y: auto;
+    }
+    .result-json {
+      background-color: #f8f9fa;
+      padding: 15px;
+      border-radius: 5px;
+      font-family: monospace;
+      white-space: pre-wrap;
+      max-height: 500px;
+      overflow-y: auto;
+    }
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 200px;
+    }
+    .spinner-border {
+      width: 3rem;
+      height: 3rem;
+    }
+    .autocomplete-container {
+      position: relative;
+    }
+    .autocomplete-results {
+      position: absolute;
+      z-index: 999;
+      background: white;
+      width: 100%;
+      border: 1px solid #ced4da;
+      border-radius: 0 0 5px 5px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    .autocomplete-item {
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+    .autocomplete-item:hover {
+      background-color: #e9ecef;
+    }
+    .btn-primary {
+      background-color: #4a6baf;
+      border-color: #4a6baf;
+    }
+    .btn-primary:hover {
+      background-color: #3a5a9f;
+      border-color: #3a5a9f;
+    }
+    .tab-content {
+      padding: 20px;
+      background-color: white;
+      border-radius: 0 0 10px 10px;
+    }
+    .btn-success {
+      background-color: #28a745;
+      border-color: #28a745;
+    }
+    .btn-success:hover {
+      background-color: #218838;
+      border-color: #1e7e34;
+    }
+    .result-actions {
+      margin-bottom: 15px;
+      display: flex;
+      justify-content: flex-end;
+    }
+  </style>
+</head>
+<body>
+  <div class="container mt-4">
+    <h1 class="text-center mb-4">NEIS 오픈 API 뷰어</h1>
+    
+    <div class="card mb-4">
+      <div class="card-header">
+        API 선택
+      </div>
+      <div class="card-body">
+        <div class="row" id="apiTypeSelection">
+          <!-- API 유형 카드들이 여기에 추가됩니다 -->
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="formCard" style="display: none;">
+      <div class="card-header">
+        <span id="selectedApiName">API 폼</span>
+      </div>
+      <div class="card-body">
+        <div class="form-section">
+          <div class="mb-3">
+            <label for="schoolName" class="form-label">학교명</label>
+            <div class="autocomplete-container">
+              <input type="text" class="form-control" id="schoolName" placeholder="학교명을 입력하세요 (예: 대진고등학교)">
+              <div class="autocomplete-results" id="schoolResults" style="display: none;"></div>
+            </div>
+          </div>
+          
+          <div class="mb-3" id="selectedSchoolInfo" style="display: none;">
+            <div class="alert alert-info">
+              <p class="mb-1"><strong>선택된 학교:</strong> <span id="displaySchoolName"></span></p>
+              <p class="mb-1"><strong>교육청 코드:</strong> <span id="displayOfficeCode"></span></p>
+              <p class="mb-0"><strong>학교 코드:</strong> <span id="displaySchoolCode"></span></p>
+            </div>
+          </div>
+          
+          <div id="additionalParams">
+            <!-- 추가 파라미터가 여기에 동적으로 추가됩니다 -->
+          </div>
+          
+          <div class="d-grid gap-2 mt-4">
+            <button class="btn btn-primary" id="searchButton">조회하기</button>
+          </div>
+        </div>
+        
+        <div id="loadingSection" style="display: none;" class="loading">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+        
+        <div id="resultSection" style="display: none;" class="result-section">
+          <div class="result-actions">
+            <button class="btn btn-success" id="excelDownloadBtn">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-excel me-1" viewBox="0 0 16 16">
+                <path d="M5.884 6.68a.5.5 0 1 0-.768.64L7.349 10l-2.233 2.68a.5.5 0 0 0 .768.64L8 10.781l2.116 2.54a.5.5 0 0 0 .768-.641L8.651 10l2.233-2.68a.5.5 0 0 0-.768-.64L8 9.219l-2.116-2.54z"/>
+                <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
+              </svg>
+              엑셀 다운로드
+            </button>
+          </div>
+          <ul class="nav nav-tabs" id="resultTabs">
+            <li class="nav-item">
+              <a class="nav-link active" id="table-tab" data-bs-toggle="tab" href="#tableResult">테이블 보기</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="json-tab" data-bs-toggle="tab" href="#jsonResult">JSON 보기</a>
+            </li>
+          </ul>
+          <div class="tab-content mt-2">
+            <div class="tab-pane fade show active" id="tableResult">
+              <div class="table-responsive">
+                <table class="table table-striped table-hover" id="resultTable">
+                  <thead id="resultTableHead"></thead>
+                  <tbody id="resultTableBody"></tbody>
+                </table>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="jsonResult">
+              <div class="result-json" id="resultJson"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.sheetjs.com/xlsx-0.19.3/package/dist/xlsx.full.min.js"></script>
+  <script>
+    // NEIS Open API 상수
+    const API_KEY = '247f27346637404cad8e1e2e8f49f9b2';
+    const BASE_URL = 'https://open.neis.go.kr/hub/';
+
+    // API 종류 목록
+    const API_TYPES = [
+      { id: 'schoolInfo', name: '학교 기본 정보', icon: '🏫' },
+      { id: 'mealServiceDietInfo', name: '급식 정보', icon: '🍱' },
+      { id: 'hisTimetable', name: '시간표 정보', icon: '📚' },
+      { id: 'SchoolSchedule', name: '학사 일정', icon: '📅' },
+      { id: 'classInfo', name: '반 정보', icon: '👨‍👩‍👧‍👦' },
+      { id: 'schoolMajorinfo', name: '학교 전공 정보', icon: '🎓' },
+      { id: 'schoolAflcoinfo', name: '학교 계열 정보', icon: '🔍' },
+      { id: 'tiClrminfo', name: '시간표 강의실 정보', icon: '🏢' },
+      { id: 'tiSubjectinfo', name: '과목 정보', icon: '📝' }
+    ];
+
+    // 교육청 코드 목록
+    const OFFICE_CODES = [
+      { code: 'B10', name: '서울특별시교육청' },
+      { code: 'C10', name: '부산광역시교육청' },
+      { code: 'D10', name: '대구광역시교육청' },
+      { code: 'E10', name: '인천광역시교육청' },
+      { code: 'F10', name: '광주광역시교육청' },
+      { code: 'G10', name: '대전광역시교육청' },
+      { code: 'H10', name: '울산광역시교육청' },
+      { code: 'I10', name: '세종특별자치시교육청' },
+      { code: 'J10', name: '경기도교육청' },
+      { code: 'K10', name: '강원특별자치도교육청' },
+      { code: 'M10', name: '충청북도교육청' },
+      { code: 'N10', name: '충청남도교육청' },
+      { code: 'P10', name: '전라북도교육청' },
+      { code: 'Q10', name: '전라남도교육청' },
+      { code: 'R10', name: '경상북도교육청' },
+      { code: 'S10', name: '경상남도교육청' },
+      { code: 'T10', name: '제주특별자치도교육청' }
+    ];
+
+    // 현재 선택된 API 정보
+    let currentApiType = null;
+    let selectedSchool = null;
+
+    // 페이지 로드시 실행
+    document.addEventListener('DOMContentLoaded', function() {
+      initializeApiTypes();
+      setupEventListeners();
+    });
+
+    // API 유형 초기화
+    function initializeApiTypes() {
+      const apiTypeSelection = document.getElementById('apiTypeSelection');
+      
+      API_TYPES.forEach(api => {
+        const col = document.createElement('div');
+        col.className = 'col-md-4 mb-3';
+        
+        col.innerHTML = `
+          <div class="card api-card h-100" data-api-id="${api.id}">
+            <div class="card-body">
+              <h5 class="card-title">${api.icon} ${api.name}</h5>
+              <p class="card-text text-muted">${api.id}</p>
+            </div>
+          </div>
+        `;
+        
+        apiTypeSelection.appendChild(col);
+      });
+    }
+
+    // 이벤트 리스너 설정
+    function setupEventListeners() {
+      // API 카드 클릭 이벤트
+      document.querySelectorAll('.api-card').forEach(card => {
+        card.addEventListener('click', function() {
+          const apiId = this.getAttribute('data-api-id');
+          selectApiType(apiId);
+        });
+      });
+      
+      // 학교명 입력 이벤트
+      const schoolNameInput = document.getElementById('schoolName');
+      schoolNameInput.addEventListener('input', debounce(searchSchools, 500));
+      
+      // 학교 검색 결과에서 항목 선택 이벤트는 동적으로 추가됩니다
+      
+      // 검색 버튼 클릭 이벤트
+      document.getElementById('searchButton').addEventListener('click', searchApi);
+      
+      // 엑셀 다운로드 버튼 클릭 이벤트
+      document.getElementById('excelDownloadBtn').addEventListener('click', downloadExcel);
+    }
+
+    // API 유형 선택
+    function selectApiType(apiId) {
+      currentApiType = API_TYPES.find(api => api.id === apiId);
+      
+      if (currentApiType) {
+        document.getElementById('selectedApiName').textContent = currentApiType.name;
+        document.getElementById('formCard').style.display = 'block';
+        
+        // 추가 파라미터 필드 생성
+        generateAdditionalParams();
+      }
+    }
+
+    // 추가 파라미터 필드 생성
+    function generateAdditionalParams() {
+      const additionalParams = document.getElementById('additionalParams');
+      additionalParams.innerHTML = '';
+      
+      // API 유형에 따라 다른 추가 파라미터 표시
+      if (['mealServiceDietInfo'].includes(currentApiType.id)) {
+        // 날짜 관련 필드 추가
+        const dateFieldsDiv = document.createElement('div');
+        dateFieldsDiv.className = 'date-fields mt-3';
+        
+        dateFieldsDiv.innerHTML = `
+          <h5>날짜 정보</h5>
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <label for="year" class="form-label">년도</label>
+              <input type="number" class="form-control" id="year" placeholder="YYYY" value="${new Date().getFullYear()}">
+            </div>
+            <div class="col-md-4 mb-3">
+              <label for="month" class="form-label">월</label>
+              <input type="number" class="form-control" id="month" placeholder="MM" min="1" max="12" value="${new Date().getMonth() + 1}">
+            </div>
+            <div class="col-md-4 mb-3">
+              <label for="day" class="form-label">일</label>
+              <input type="number" class="form-control" id="day" placeholder="DD" min="1" max="31" value="${new Date().getDate()}">
+            </div>
+          </div>
+        `;
+        
+        additionalParams.appendChild(dateFieldsDiv);
+      } 
+      // 시간표 API - 기간 설정 추가
+      else if (currentApiType.id === 'hisTimetable') {
+        const timetableFieldsDiv = document.createElement('div');
+        timetableFieldsDiv.className = 'timetable-fields mt-3';
+        
+        // 오늘 날짜와 일주일 후 날짜 계산
+        const today = new Date();
+        const nextWeek = new Date(today);
+        nextWeek.setDate(today.getDate() + 7);
+        
+        const todayStr = today.toISOString().slice(0, 10);
+        const nextWeekStr = nextWeek.toISOString().slice(0, 10);
+        
+        timetableFieldsDiv.innerHTML = `
+          <h5>기간 설정</h5>
+          <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" id="useTimetablePeriod">
+            <label class="form-check-label" for="useTimetablePeriod">
+              기간으로 검색하기
+            </label>
+          </div>
+          
+          <div id="timetablePeriodFields" style="display: none;">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="timetableFromDate" class="form-label">시작일</label>
+                <input type="date" class="form-control" id="timetableFromDate" value="${todayStr}">
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="timetableToDate" class="form-label">종료일</label>
+                <input type="date" class="form-control" id="timetableToDate" value="${nextWeekStr}">
+              </div>
+            </div>
+          </div>
+          
+          <div id="timetableSingleDateFields">
+            <div class="row">
+              <div class="col-md-4 mb-3">
+                <label for="year" class="form-label">년도</label>
+                <input type="number" class="form-control" id="year" placeholder="YYYY" value="${today.getFullYear()}">
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="month" class="form-label">월</label>
+                <input type="number" class="form-control" id="month" placeholder="MM" min="1" max="12" value="${today.getMonth() + 1}">
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="day" class="form-label">일</label>
+                <input type="number" class="form-control" id="day" placeholder="DD" min="1" max="31" value="${today.getDate()}">
+              </div>
+            </div>
+          </div>
+          
+          <h5 class="mt-3">학년/반 정보</h5>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="grade" class="form-label">학년</label>
+              <select class="form-select" id="grade">
+                <option value="">선택하세요</option>
+                <option value="1">1학년</option>
+                <option value="2">2학년</option>
+                <option value="3">3학년</option>
+              </select>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="classNum" class="form-label">반 (선택사항)</label>
+              <input type="number" class="form-control" id="classNum" placeholder="반 번호">
+            </div>
+          </div>
+        `;
+        
+        additionalParams.appendChild(timetableFieldsDiv);
+        
+        // 기간 검색 체크박스 이벤트 설정
+        setTimeout(() => {
+          const periodCheckbox = document.getElementById('useTimetablePeriod');
+          const periodFields = document.getElementById('timetablePeriodFields');
+          const singleDateFields = document.getElementById('timetableSingleDateFields');
+          
+          periodCheckbox.addEventListener('change', function() {
+            if (this.checked) {
+              periodFields.style.display = 'block';
+              singleDateFields.style.display = 'none';
+            } else {
+              periodFields.style.display = 'none';
+              singleDateFields.style.display = 'block';
+            }
+          });
+        }, 100);
+      }
+      // 학사일정 API - 기간 설정 추가
+      else if (currentApiType.id === 'SchoolSchedule') {
+        const scheduleFieldsDiv = document.createElement('div');
+        scheduleFieldsDiv.className = 'schedule-fields mt-3';
+        
+        // 오늘 날짜와 한 달 후 날짜 계산
+        const today = new Date();
+        const nextMonth = new Date(today);
+        nextMonth.setMonth(today.getMonth() + 1);
+        
+        const todayStr = today.toISOString().slice(0, 10);
+        const nextMonthStr = nextMonth.toISOString().slice(0, 10);
+        
+        scheduleFieldsDiv.innerHTML = `
+          <h5>기간 설정</h5>
+          <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" id="useSchoolSchedulePeriod">
+            <label class="form-check-label" for="useSchoolSchedulePeriod">
+              기간으로 검색하기
+            </label>
+          </div>
+          
+          <div id="periodSearchFields" style="display: none;">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="fromDate" class="form-label">시작일</label>
+                <input type="date" class="form-control" id="fromDate" value="${todayStr}">
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="toDate" class="form-label">종료일</label>
+                <input type="date" class="form-control" id="toDate" value="${nextMonthStr}">
+              </div>
+            </div>
+          </div>
+          
+          <div id="monthSearchFields">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="year" class="form-label">년도</label>
+                <input type="number" class="form-control" id="year" placeholder="YYYY" value="${today.getFullYear()}">
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="month" class="form-label">월</label>
+                <input type="number" class="form-control" id="month" placeholder="MM" min="1" max="12" value="${today.getMonth() + 1}">
+              </div>
+            </div>
+          </div>
+        `;
+        
+        additionalParams.appendChild(scheduleFieldsDiv);
+        
+        // 기간 검색 체크박스 이벤트 설정
+        setTimeout(() => {
+          const periodCheckbox = document.getElementById('useSchoolSchedulePeriod');
+          const periodFields = document.getElementById('periodSearchFields');
+          const monthFields = document.getElementById('monthSearchFields');
+          
+          periodCheckbox.addEventListener('change', function() {
+            if (this.checked) {
+              periodFields.style.display = 'block';
+              monthFields.style.display = 'none';
+            } else {
+              periodFields.style.display = 'none';
+              monthFields.style.display = 'block';
+            }
+          });
+        }, 100);
+      }
+      // 학교계열정보 API - 학년 선택 필드 추가
+      else if (currentApiType.id === 'schoolAflcoinfo') {
+        const aflcoFieldsDiv = document.createElement('div');
+        aflcoFieldsDiv.className = 'aflco-fields mt-3';
+        
+        aflcoFieldsDiv.innerHTML = `
+          <h5>학년 정보</h5>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="aflcoGrade" class="form-label">학년</label>
+              <select class="form-select" id="aflcoGrade">
+                <option value="">선택하세요</option>
+                <option value="1">1학년</option>
+                <option value="2">2학년</option>
+                <option value="3">3학년</option>
+              </select>
+            </div>
+          </div>
+        `;
+        
+        additionalParams.appendChild(aflcoFieldsDiv);
+      }
+      // 과목정보 API - 학년 선택 필드 추가
+      else if (currentApiType.id === 'tiSubjectinfo') {
+        const subjectFieldsDiv = document.createElement('div');
+        subjectFieldsDiv.className = 'subject-fields mt-3';
+        
+        subjectFieldsDiv.innerHTML = `
+          <h5>학년 정보</h5>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="subjectGrade" class="form-label">학년</label>
+              <select class="form-select" id="subjectGrade">
+                <option value="">선택하세요</option>
+                <option value="1">1학년</option>
+                <option value="2">2학년</option>
+                <option value="3">3학년</option>
+              </select>
+            </div>
+          </div>
+        `;
+        
+        additionalParams.appendChild(subjectFieldsDiv);
+      }
+    }
+
+    // 학교 검색
+    async function searchSchools() {
+      const schoolName = document.getElementById('schoolName').value.trim();
+      const schoolResults = document.getElementById('schoolResults');
+      
+      if (schoolName.length < 2) {
+        schoolResults.style.display = 'none';
+        return;
+      }
+      
+      try {
+        const response = await fetch(`${BASE_URL}schoolInfo?Type=json&KEY=${API_KEY}&pIndex=1&pSize=5&SCHUL_NM=${encodeURIComponent(schoolName)}`);
+        const data = await response.json();
+        
+        if (data.RESULT) {
+          schoolResults.innerHTML = `<div class="autocomplete-item">검색 결과가 없습니다</div>`;
+        } else if (data.schoolInfo) {
+          const schools = data.schoolInfo[1].row;
+          
+          schoolResults.innerHTML = '';
+          schools.forEach(school => {
+            const item = document.createElement('div');
+            item.className = 'autocomplete-item';
+            item.innerHTML = `${school.SCHUL_NM} <small class="text-muted">(${school.ATPT_OFCDC_SC_NM})</small>`;
+            
+            item.addEventListener('click', () => {
+              selectSchool(school);
+              schoolResults.style.display = 'none';
+            });
+            
+            schoolResults.appendChild(item);
+          });
+        }
+        
+        schoolResults.style.display = 'block';
+      } catch (error) {
+        console.error('학교 검색 중 오류 발생:', error);
+        schoolResults.innerHTML = `<div class="autocomplete-item">검색 중 오류가 발생했습니다</div>`;
+        schoolResults.style.display = 'block';
+      }
+    }
+
+    // 학교 선택
+    function selectSchool(school) {
+      selectedSchool = school;
+      
+      document.getElementById('schoolName').value = school.SCHUL_NM;
+      document.getElementById('displaySchoolName').textContent = school.SCHUL_NM;
+      document.getElementById('displayOfficeCode').textContent = `${school.ATPT_OFCDC_SC_CODE} (${school.ATPT_OFCDC_SC_NM})`;
+      document.getElementById('displaySchoolCode').textContent = school.SD_SCHUL_CODE;
+      document.getElementById('selectedSchoolInfo').style.display = 'block';
+    }
+
+    // API 검색
+    async function searchApi() {
+      if (!currentApiType || !selectedSchool) {
+        alert('API 유형과 학교를 선택해주세요.');
+        return;
+      }
+      
+      // 로딩 표시
+      document.getElementById('loadingSection').style.display = 'flex';
+      document.getElementById('resultSection').style.display = 'none';
+      
+      try {
+        // 기본 파라미터 설정
+        const params = {
+          Type: 'json',
+          KEY: API_KEY,
+          pIndex: 1,
+          pSize: 100,
+          ATPT_OFCDC_SC_CODE: selectedSchool.ATPT_OFCDC_SC_CODE,
+          SD_SCHUL_CODE: selectedSchool.SD_SCHUL_CODE
+        };
+        
+        // API 유형에 따라 추가 파라미터 수집
+        if (['mealServiceDietInfo'].includes(currentApiType.id)) {
+          const year = document.getElementById('year').value;
+          const month = document.getElementById('month').value.padStart(2, '0');
+          const day = document.getElementById('day').value.padStart(2, '0');
+          params.MLSV_YMD = `${year}${month}${day}`;
+        } else if (currentApiType.id === 'SchoolSchedule') {
+          if (document.getElementById('useSchoolSchedulePeriod').checked) {
+            // 기간 검색 사용
+            const fromDate = document.getElementById('fromDate').value.replace(/-/g, '');
+            const toDate = document.getElementById('toDate').value.replace(/-/g, '');
+            params.TI_FROM_YMD = fromDate;
+            params.TI_TO_YMD = toDate;
+          } else {
+            // 단일 월 검색
+            const year = document.getElementById('year').value;
+            const month = document.getElementById('month').value.padStart(2, '0');
+            params.AA_YMD = `${year}${month}`;
+          }
+        } else if (currentApiType.id === 'hisTimetable') {
+          // 학년, 반 정보 추가
+          const grade = document.getElementById('grade').value;
+          if (grade) params.GRADE = grade;
+          
+          const classNum = document.getElementById('classNum').value;
+          if (classNum) params.CLASS_NM = classNum;
+          
+          if (document.getElementById('useTimetablePeriod') && document.getElementById('useTimetablePeriod').checked) {
+            // 기간 검색 사용
+            const fromDate = document.getElementById('timetableFromDate').value.replace(/-/g, '');
+            const toDate = document.getElementById('timetableToDate').value.replace(/-/g, '');
+            params.TI_FROM_YMD = fromDate;
+            params.TI_TO_YMD = toDate;
+          } else {
+            // 단일 날짜 검색
+            const year = document.getElementById('year').value;
+            const month = document.getElementById('month').value.padStart(2, '0');
+            const day = document.getElementById('day').value.padStart(2, '0');
+            params.ALL_TI_YMD = `${year}${month}${day}`;
+          }
+        } 
+        // 학교계열정보 API는 학년 정보가 필요
+        else if (currentApiType.id === 'schoolAflcoinfo') {
+          const grade = document.getElementById('aflcoGrade').value;
+          if (grade) params.GRADE = grade;
+          
+          // DGHT_CRSE_SC_NM 값 추가 (주간/야간)
+          params.DGHT_CRSE_SC_NM = '주간';
+        }
+        // 과목정보 API도 학년 정보가 필요
+        else if (currentApiType.id === 'tiSubjectinfo') {
+          const grade = document.getElementById('subjectGrade').value;
+          if (grade) params.GRADE = grade;
+          // AY(학년도), SEM(학기) 추가
+          params.AY = new Date().getFullYear();
+          params.SEM = (new Date().getMonth() >= 8 || new Date().getMonth() <= 1) ? '2' : '1';
+        }
+        
+        // URL 쿼리 문자열 구성
+        const queryString = Object.entries(params)
+          .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+          .join('&');
+        
+        // API 요청 URL 구성
+        const url = `${BASE_URL}${currentApiType.id}?${queryString}`;
+        
+        // API 요청
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        // 결과 표시
+        displayResults(data);
+      } catch (error) {
+        console.error('API 호출 중 오류 발생:', error);
+        alert('API 호출 중 오류가 발생했습니다. 콘솔을 확인해주세요.');
+      } finally {
+        document.getElementById('loadingSection').style.display = 'none';
+      }
+    }
+
+    // 결과 표시
+    function displayResults(data) {
+      const resultSection = document.getElementById('resultSection');
+      const resultTableHead = document.getElementById('resultTableHead');
+      const resultTableBody = document.getElementById('resultTableBody');
+      const resultJson = document.getElementById('resultJson');
+      
+      // 전역 변수에 데이터 저장 (엑셀 다운로드용)
+      window.currentApiData = data;
+      
+      // JSON 결과 표시
+      resultJson.textContent = JSON.stringify(data, null, 2);
+      
+      // 테이블 결과 표시
+      resultTableHead.innerHTML = '';
+      resultTableBody.innerHTML = '';
+      
+      // API 응답에서 데이터 추출
+      let rows = [];
+      
+      if (data[currentApiType.id]) {
+        // 오류 응답 처리
+        if (data.RESULT && data.RESULT.CODE !== 'INFO-000') {
+          alert(`API 오류: ${data.RESULT.MESSAGE}`);
+          return;
+        }
+        
+        // 결과가 있는 경우
+        rows = data[currentApiType.id][1].row;
+        
+        if (rows && rows.length > 0) {
+          // 테이블 헤더 생성
+          const headerRow = document.createElement('tr');
+          
+          Object.keys(rows[0]).forEach(key => {
+            const th = document.createElement('th');
+            th.textContent = key;
+            headerRow.appendChild(th);
+          });
+          
+          resultTableHead.appendChild(headerRow);
+          
+          // 테이블 본문 생성
+          rows.forEach(row => {
+            const tr = document.createElement('tr');
+            
+            Object.values(row).forEach(value => {
+              const td = document.createElement('td');
+              
+              // HTML 태그가 포함된 경우 (예: 급식 정보)
+              if (typeof value === 'string' && value.includes('<br/>')) {
+                td.innerHTML = value.replace(/<br\/>/g, '<br>');
+              } else {
+                td.textContent = value;
+              }
+              
+              tr.appendChild(td);
+            });
+            
+            resultTableBody.appendChild(tr);
+          });
+        } else {
+          resultTableBody.innerHTML = '<tr><td colspan="100%" class="text-center">결과가 없습니다</td></tr>';
+        }
+      } else if (data.RESULT) {
+        // 오류 응답만 있는 경우
+        resultTableBody.innerHTML = `<tr><td colspan="100%" class="text-center">API 오류: ${data.RESULT.MESSAGE}</td></tr>`;
+      } else {
+        // 예상치 못한 응답 형식
+        resultTableBody.innerHTML = '<tr><td colspan="100%" class="text-center">응답 데이터 형식이 예상과 다릅니다</td></tr>';
+      }
+      
+      resultSection.style.display = 'block';
+    }
+
+    // 엑셀 다운로드 함수
+    function downloadExcel() {
+      if (!window.currentApiData || !currentApiType) {
+        alert('다운로드할 데이터가 없습니다.');
+        return;
+      }
+      
+      try {
+        // API 데이터 추출
+        let rows = [];
+        
+        if (window.currentApiData[currentApiType.id] && window.currentApiData[currentApiType.id][1].row) {
+          rows = window.currentApiData[currentApiType.id][1].row;
+        } else {
+          alert('다운로드할 데이터가 없습니다.');
+          return;
+        }
+        
+        // HTML 태그 제거하는 함수
+        function removeHtmlTags(text) {
+          if (typeof text !== 'string') return text;
+          return text.replace(/<\/?[^>]+(>|$)/g, ' ');
+        }
+        
+        // 데이터 가공 - HTML 태그 제거
+        const cleanData = rows.map(row => {
+          const cleanRow = {};
+          Object.entries(row).forEach(([key, value]) => {
+            cleanRow[key] = removeHtmlTags(value);
+          });
+          return cleanRow;
+        });
+        
+        // 워크시트 생성
+        const worksheet = XLSX.utils.json_to_sheet(cleanData);
+        
+        // 워크북 생성 및 워크시트 추가
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, currentApiType.name || 'Sheet1');
+        
+        // 파일명 생성 (현재 날짜 포함)
+        const now = new Date();
+        const dateStr = now.toISOString().slice(0, 10).replace(/-/g, '');
+        const fileName = `NEIS_${currentApiType.id}_${dateStr}.xlsx`;
+        
+        // 엑셀 파일 다운로드
+        XLSX.writeFile(workbook, fileName);
+        
+      } catch (error) {
+        console.error('엑셀 다운로드 중 오류 발생:', error);
+        alert('엑셀 다운로드 중 오류가 발생했습니다.');
+      }
+    }
+
+    // 디바운스 유틸리티 함수
+    function debounce(func, delay) {
+      let timeout;
+      return function() {
+        const context = this;
+        const args = arguments;
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(context, args), delay);
+      };
+    }
+  </script>
+</body>
+</html> 
