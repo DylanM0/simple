@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2025년 고교학점제 전면 시행 안내</title>
+    <style>
+        /* 전체 스타일 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        
+        body {
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* 헤더 섹션 */
+        header {
+            background: linear-gradient(135deg, #4F6CFF, #3445B4);
+            color: white;
+            padding: 80px 0 60px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        
+        header p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .btn-group {
+            margin: 30px 0;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            margin: 0 10px;
+            background-color: white;
+            color: #3445B4;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* 섹션 공통 스타일 */
+        section {
+            padding: 80px 0;
+        }
+        
+        section h2 {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 50px;
+            position: relative;
+        }
+        
+        section h2:after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: #4F6CFF;
+            margin: 15px auto;
+        }
+        
+        /* 태그 스타일 */
+        .tags {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .tag {
+            display: inline-block;
+            background-color: #e6eaff;
+            color: #3445B4;
+            padding: 8px 15px;
+            margin: 5px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+        
+        /* 비교 테이블 */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 40px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .comparison-table th, .comparison-table td {
+            padding: 15px 20px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .comparison-table th {
+            background-color: #4F6CFF;
+            color: white;
+        }
+        
+        .comparison-table tr:nth-child(even) {
+            background-color: #f8f9ff;
+        }
+        
+        /* 운영방식 섹션 */
+        .operation-steps {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            counter-reset: step-counter;
+        }
+        
+        .step {
+            flex-basis: 45%;
+            margin-bottom: 30px;
+            padding: 25px;
+            background-color: #f8f9ff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            position: relative;
+            padding-left: 70px;
+        }
+        
+        .step:before {
+            counter-increment: step-counter;
+            content: counter(step-counter);
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            width: 40px;
+            height: 40px;
+            background-color: #4F6CFF;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+        }
+        
+        .step h3 {
+            margin-bottom: 10px;
+            color: #3445B4;
+        }
+        
+        /* 긍정적 변화 섹션 */
+        .benefits {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+        }
+        
+        .benefit-card {
+            flex-basis: 280px;
+            padding: 30px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .benefit-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .benefit-icon {
+            font-size: 2.5rem;
+            color: #4F6CFF;
+            margin-bottom: 20px;
+        }
+        
+        /* 자료 섹션 */
+        .resources {
+            background-color: #f8f9ff;
+        }
+        
+        .resource-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .resource-link {
+            flex-basis: 45%;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+        }
+        
+        .resource-link i {
+            margin-right: 15px;
+            color: #4F6CFF;
+            font-size: 1.5rem;
+        }
+        
+        .resource-link a {
+            color: #3445B4;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .resource-link a:hover {
+            text-decoration: underline;
+        }
+        
+        /* 푸터 */
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 50px 0 30px;
+            text-align: center;
+        }
+        
+        .contact-btns {
+            margin-bottom: 30px;
+        }
+        
+        .contact-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 0 10px 10px;
+            background-color: #4F6CFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .contact-btn:hover {
+            background-color: #3445B4;
+        }
+        
+        .footer-links {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #555;
+        }
+        
+        .footer-links a {
+            color: #ddd;
+            margin: 0 10px;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        /* 반응형 스타일 */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2.2rem;
+            }
+            
+            section h2 {
+                font-size: 1.8rem;
+            }
+            
+            .btn-group .btn {
+                display: block;
+                margin: 10px auto;
+                max-width: 300px;
+            }
+            
+            .step {
+                flex-basis: 100%;
+            }
+            
+            .comparison-table {
+                font-size: 0.9rem;
+            }
+            
+            .resource-link {
+                flex-basis: 100%;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- 헤더 섹션 -->
+    <header>
+        <div class="container">
+            <h1>미래를 스스로 설계하세요!</h1>
+            <h2>2025년 고교학점제 전면 시행</h2>
+            <p>학생 선택 중심 교육과정, 고교학점제가 무엇인지, 어떻게 대비해야 하는지 핵심 정보를 확인하세요.</p>
+            <div class="btn-group">
+                <a href="#intro" class="btn">자세히 알아보기</a>
+                <a href="#download" class="btn">핵심 자료 다운로드</a>
+                <a href="#video" class="btn">설명회 영상 보기</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 개요 섹션 -->
+    <section id="intro">
+        <div class="container">
+            <h2>고교학점제, 무엇이 다른가요?</h2>
+            <p style="text-align: center; margin-bottom: 30px;">
+                고교학점제는 학생이 자신의 진로와 적성에 따라 다양한 과목을 선택하고 이수하여, 누적 학점이 <strong>졸업 기준(192학점)</strong>에 도달하면 졸업을 인정받는 제도입니다.
+            </p>
+            <div class="tags">
+                <span class="tag">#학생선택권</span>
+                <span class="tag">#진로맞춤</span>
+                <span class="tag">#개별성장</span>
+                <span class="tag">#미래역량</span>
+            </div>
+            
+            <table class="comparison-table">
+                <tr>
+                    <th>구분</th>
+                    <th>기존 제도</th>
+                    <th>고교학점제</th>
+                </tr>
+                <tr>
+                    <td>교육과정</td>
+                    <td>국가 결정(획일적)</td>
+                    <td>학생 선택 중심(다양화)</td>
+                </tr>
+                <tr>
+                    <td>졸업 기준</td>
+                    <td>출석 일수</td>
+                    <td>학점 이수</td>
+                </tr>
+                <tr>
+                    <td>평가</td>
+                    <td>상대평가 중심</td>
+                    <td>성취평가(절대평가) 확대</td>
+                </tr>
+            </table>
+        </div>
+    </section>
+
+    <!-- 운영 방식 섹션 -->
+    <section id="operation">
+        <div class="container">
+            <h2>고교학점제, 이렇게 운영됩니다!</h2>
+            <div class="operation-steps">
+                <div class="step">
+                    <h3>과목 선택권 확대</h3>
+                    <p>공통과목 외에 흥미와 진로에 맞는 다양한 선택과목(일반/진로/융합) 수강이 가능합니다.</p>
+                </div>
+                <div class="step">
+                    <h3>학점 기반 졸업</h3>
+                    <p>정해진 학점(예: 총 192학점, 교과 174 + 창체 18)을 이수해야 졸업이 가능합니다.</p>
+                </div>
+                <div class="step">
+                    <h3>최소 성취수준 보장</h3>
+                    <p>모든 학생이 기준 성취수준에 도달하도록 보충 지도 및 지원이 제공됩니다.</p>
+                </div>
+                <div class="step">
+                    <h3>진로·학업 설계 지도</h3>
+                    <p>학생 스스로 과목을 선택하고 학업 계획을 세울 수 있도록 상담 및 지원이 강화됩니다.</p>
+                </div>
+                <div class="step">
+                    <h3>성취평가제 적용 확대</h3>
+                    <p>과정 중심 평가와 성취평가제를 통해 학생의 성장 과정과 성취를 평가합니다.</p>
+                </div>
+                <div class="step">
+                    <h3>학교-학부모 협력</h3>
+                    <p>학교 설명회 참여, 교사와의 상담 등을 통해 자녀의 학습을 적극적으로 지원합니다.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 긍정적 변화 섹션 -->
+    <section id="benefits">
+        <div class="container">
+            <h2>고교학점제가 가져올 긍정적인 변화</h2>
+            <div class="benefits">
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <h3>학생 맞춤형 교육 실현</h3>
+                    <p>개인의 특성과 진로에 맞는 교육과정으로 개별화된 학습경로를 제공합니다.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>자기주도 학습 능력 향상</h3>
+                    <p>스스로 선택하고 계획하는 과정에서 학생들의 주도성이 크게 증진됩니다.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <h3>잠자는 교실 깨우기</h3>
+                    <p>흥미와 적성에 맞는 과목 선택으로 학습 동기와 참여도가 향상됩니다.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3>미래 사회 대비 역량 강화</h3>
+                    <p>문제해결능력, 융합적 사고 등 미래 사회에 필요한 핵심 역량을 개발합니다.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 추가 자료 섹션 -->
+    <section id="resources" class="resources">
+        <div class="container">
+            <h2>더 궁금하다면? 관련 자료를 확인하세요!</h2>
+            <div class="resource-links">
+                <div class="resource-link">
+                    <i class="fas fa-external-link-alt"></i>
+                    <a href="https://www.moe.go.kr" target="_blank">교육부 고교학점제 안내 페이지</a>
+                </div>
+                <div class="resource-link">
+                    <i class="fas fa-external-link-alt"></i>
+                    <a href="https://www.edu.go.kr" target="_blank">시/도 교육청 고교학점제 자료실</a>
+                </div>
+                <div class="resource-link">
+                    <i class="fas fa-question-circle"></i>
+                    <a href="https://www.credit.go.kr" target="_blank">고교학점제 관련 Q&A 모음</a>
+                </div>
+                <div class="resource-link">
+                    <i class="fas fa-compass"></i>
+                    <a href="https://www.career.go.kr" target="_blank">진로 탐색 및 학과 정보 - 커리어넷</a>
+                </div>
+                <div class="resource-link">
+                    <i class="fas fa-university"></i>
+                    <a href="https://www.adiga.kr" target="_blank">대입정보포털 어디가</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 푸터 섹션 -->
+    <footer>
+        <div class="container">
+            <h2>고교학점제, 함께 준비합니다</h2>
+            <p>궁금한 점이나 필요한 지원이 있다면 언제든지 문의해주세요.</p>
+            <div class="contact-btns">
+                <a href="#contact" class="contact-btn">온라인 문의하기</a>
+                <a href="#faq" class="contact-btn">자주 묻는 질문(FAQ)</a>
+                <a href="#seminar" class="contact-btn">관련 설명회 신청</a>
+                <a href="#newsletter" class="contact-btn">뉴스레터 구독</a>
+            </div>
+            <div class="footer-links">
+                <p>© 2025 고교학점제 지원센터. All Rights Reserved.</p>
+                <div>
+                    <a href="#privacy">개인정보처리방침</a>
+                    <a href="#terms">이용약관</a>
+                    <a href="#sitemap">사이트맵</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
